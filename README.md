@@ -1,2 +1,2 @@
-# sAgent
+# Agent
 A customer support AI Agent
