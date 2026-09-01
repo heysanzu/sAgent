@@ -445,7 +445,6 @@ async function handleSend() {
   showTyping();
 
   try {
-try {
     const res = await fetch("https://agent.doollearn.workers.dev/", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
