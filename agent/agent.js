@@ -449,7 +449,7 @@ async function handleSend() {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        model: "llama-3.3-70b-versatile", // Updated to an active Groq model
+        model: "llama-3.1-70b-versatile", // Updated to an active Groq model
         max_tokens: 1000,
         messages: [
           { role: "system", content: SYSTEM },
