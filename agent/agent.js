@@ -12,7 +12,7 @@ const historyList = document.getElementById("historyList");
 
 /* ── Config ────────────────────────────────────────────────── */
 const WORKER_URL = "https://agent.doollearn.workers.dev/";
-const MODEL      = "llama3-8b-8192";
+const MODEL      = "llama-3.3-70b-versatile";
 
 /* ── Order database (in-memory) ───────────────────────────── */
 const ORDERS = {
