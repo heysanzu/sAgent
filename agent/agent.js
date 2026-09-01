@@ -19,7 +19,7 @@ const ORDERS = {
   "ORD-1001": {
     item: "Mechanical Keyboard (TKL)",
     status: "shipped",
-    address: "42 Kenduadih, Dhanbad, NY 10001",
+    address: "42 Kenduadih, Dhanbad, JH 810001",
     total: "₹1299.00",
     date: "Aug 28, 2026",
     tracking: "TRK-992341-DHN",
@@ -42,18 +42,18 @@ const ORDERS = {
     address: "5 City Center Road, Dhanbad, JH 802301",
     total: "₹2299.00",
     date: "Aug 20, 2026",
-    tracking: "TRK-992343-US",
-    carrier: "DHL",
+    tracking: "TRK-992343-DHN",
+    carrier: "MUXBITE",
     eta: "Delivered Aug 26, 2026",
   },
   "ORD-1004": {
     item: "Wireless Mouse (Ergonomic)",
     status: "processing",
-    address: "99 Maple Dr, Chicago, IL 60601",
-    total: "$79.00",
+    address: "99 Govindpur, Dhanbad, JH 800601",
+    total: "₹799.00",
     date: "Aug 31, 2026",
     tracking: "Pending",
-    carrier: "USPS",
+    carrier: "MUXBITE",
     eta: "Sep 7, 2026",
   },
 };
@@ -61,7 +61,7 @@ const ORDERS = {
 /* ── Session management (in-memory) ───────────────────────── */
 let sessions = [];
 let activeId = null;
-let history  = []; /* turns sent to API — does NOT include system prompt */
+let history  = []; 
 let isBusy   = false;
 
 function startNewSession() {
@@ -130,11 +130,11 @@ You can:
 4. Answer general questions about shipping, returns, payments
 
 STORE POLICIES:
-- Standard shipping: 5-7 business days (free over $50)
-- Express shipping: 1-2 business days ($12 extra)
+- Standard shipping: 5-7 business days (free over ₹500)
+- Express shipping: 1-2 business days (₹125 extra)
 - Returns: 30 days from delivery date
 - Refunds: 3-5 business days to original payment method
-- Payment: Visa, Mastercard, Amex, PayPal, Apple Pay
+- Payment: Visa, Mastercard, Amex, PayPal, Apple Pay, UPI
 - Support: 24/7 via Agent; human agents Mon-Fri 9am-5pm EST
 
 STRICT OUTPUT RULES:
