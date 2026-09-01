@@ -445,11 +445,12 @@ async function handleSend() {
   showTyping();
 
   try {
-      const res = await fetch("https://agent.doollearn.workers.dev/", {
+try {
+    const res = await fetch("https://agent.doollearn.workers.dev/", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        model: "llama-3.1-70b-versatile", // Updated to an active Groq model
+        model: "llama-3.1-70b-versatile", // CHANGE: Updated model ID
         max_tokens: 1000,
         messages: [
           { role: "system", content: SYSTEM },
@@ -457,6 +458,7 @@ async function handleSend() {
         ],
       }),
     });
+  
     if (!res.ok) {
       const err = await res.json().catch(() => ({}));
       throw new Error(err.error?.message || `HTTP ${res.status}`);
