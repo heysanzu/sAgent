@@ -446,10 +446,10 @@ async function handleSend() {
 
   try {
     const res = await fetch("https://agent.doollearn.workers.dev/", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({
-    model: "llama-3.3-70b-versatile", // Use an active model ID
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+    model: "llama-3.1-8b-instant", // <-- Change to an active production model
     max_tokens: 1000,
     messages: [
       { role: "system", content: SYSTEM },
