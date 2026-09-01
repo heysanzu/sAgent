@@ -3,7 +3,7 @@ An AI-powered customer support agent built to automate inquiry handling, trackin
 
 [![Live](https://img.shields.io/badge/▶_Live-grey?style=for-the-badge)](https://heysanzu.github.io/sAgent)
 
-![Thumbnail](src/cover.png)
+![Thumbnail](src/agentUI.png)
 
 ---
 
