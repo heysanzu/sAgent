@@ -446,18 +446,17 @@ async function handleSend() {
 
   try {
     const res = await fetch("https://agent.doollearn.workers.dev/", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        model: "llama-3.3-70b-versatile",
-        max_tokens: 1000,
-        messages: [
-          { role: "system", content: SYSTEM },
-          ...history,
-        ],
-      }),
-    });
-
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+    model: "llama-3.1-70b-versatile", // <-- Changed to supported model
+    max_tokens: 1000,
+    messages: [
+      { role: "system", content: SYSTEM },
+      ...history,
+    ],
+  }),
+});
     if (!res.ok) {
       const err = await res.json().catch(() => ({}));
       throw new Error(err.error?.message || `HTTP ${res.status}`);
