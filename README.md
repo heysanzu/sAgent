@@ -1,15 +1,15 @@
 # Agent
 An AI-powered customer support agent built to automate inquiry handling, tracking and streamline user assistance in real time!
 
-[![Live](https://img.shields.io/badge/▶_Live-grey?style=for-the-badge)](https://heysanzu.github.io/sAgent)
+[![Live](https://img.shields.io/badge/▶_Live-grey?style=for-the-badge)](https://heysanzu.github.io/sanzuAgent)
 
 ![Thumbnail](src/agentUI.png)
 
 ---
 
 ```bash
-git clone https://github.com/heysanzu/sAgent.git
-cd sAgent
+git clone https://github.com/heysanzu/sanzuAgent.git
+cd sanzuAgent
 ```
 
 <p align="left">
