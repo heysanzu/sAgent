@@ -2,7 +2,7 @@
   "name": "Agent",
   "short_name": "Agent",
   "description": "AI-powered customer support assistant by Sanzu",
-  "start_url": "/sAgent/",
+  "start_url": "/sanzuAgent/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#000000",
