@@ -67,7 +67,7 @@ let isBusy   = false;
 function startNewSession() {
   activeId = Date.now().toString();
   history  = [];
-  sessions.unshift({ id: activeId, title: "New conversation", messages: [] });
+  sessions.unshift({ id: activeId, title: "New conversation", messages: [], history: [] });
   if (sessions.length > 20) sessions.length = 20;
   renderHistory();
   messagesEl.innerHTML = "";
@@ -133,16 +133,12 @@ STORE POLICIES:
 - Support: 24/7 via Agent; human agents Mon-Fri 9am-5pm EST
 
 STRICT OUTPUT RULES:
-When user gives an order ID, output ONLY this exact JSON, nothing else:
-{"action":"order_status","orderId":"ORD-XXXX"}
-
-When user gives order ID + new address to update, output ONLY:
-{"action":"update_shipping","orderId":"ORD-XXXX","newAddress":"full address"}
-
-When user requests refund with order ID, output ONLY:
-{"action":"refund","orderId":"ORD-XXXX"}
-
-For all other messages: plain text only, under 80 words, no markdown, no JSON.`;
+- If the user provides a NEW order request requiring an action, output ONLY one of these exact JSON structures:
+  * Check status: {"action":"order_status","orderId":"ORD-XXXX"}
+  * Update address: {"action":"update_shipping","orderId":"ORD-XXXX","newAddress":"full address"}
+  * Request refund: {"action":"refund","orderId":"ORD-XXXX"}
+- If you are answering follow-up questions or general support queries, respond in plain text only. Do NOT output JSON.
+- Never output an empty response.`;
 
 /* ── SVG icons ─────────────────────────────────────────────── */
 const ICONS = {
@@ -219,10 +215,8 @@ function timestamp() {
 
 /* Try to extract JSON from model reply — handles ```json fences and prose wrapping */
 function extractJSON(str) {
-  /* strip code fences */
   const fenced = str.match(/```(?:json)?\s*([\s\S]+?)```/i);
   const candidate = fenced ? fenced[1].trim() : str.trim();
-  /* find first {...} block */
   const match = candidate.match(/\{[\s\S]*\}/);
   if (!match) return null;
   try { return JSON.parse(match[0]); } catch (_) { return null; }
@@ -387,7 +381,7 @@ async function handleSend() {
   appendMessage("user", userHtml);
   updateSession("user", userHtml, text);
 
-  /* Add to history BEFORE the fetch so it's included in this call */
+  /* Add turn to API history array */
   history.push({ role: "user", content: text });
 
   /* Reset input */
@@ -412,56 +406,56 @@ async function handleSend() {
       }),
     });
 
-    /* Read body once as text so we can inspect it on any error */
     const bodyText = await res.text();
     let data;
     try { data = JSON.parse(bodyText); }
     catch (_) { throw new Error(`Worker returned non-JSON: ${bodyText.slice(0, 120)}`); }
 
-    /* Surface any error the worker or Groq sent back */
     if (!res.ok) {
       const msg = data?.error?.message || data?.message || `HTTP ${res.status}`;
       throw new Error(msg);
     }
 
-    /* Groq / OpenAI-compatible response */
     const rawReply = (data?.choices?.[0]?.message?.content || "").trim();
 
     if (!rawReply) {
-      /* Log full response for debugging */
       console.warn("[Agent] Empty reply. Full response:", JSON.stringify(data));
       throw new Error("Agent returned an empty reply. Check worker logs.");
     }
 
-    /* Add assistant turn to history */
-    history.push({ role: "assistant", content: rawReply });
+    removeTyping();
+
+    /* Parse action JSON */
+    const parsed = extractJSON(rawReply);
+    let agentHtml = "";
+    let historyContent = rawReply;
+
+    if (parsed?.action === "order_status") {
+      agentHtml = renderOrderStatus(parsed.orderId || "");
+      historyContent = `Displayed order status for ${parsed.orderId || "order"}.`;
+    } else if (parsed?.action === "update_shipping") {
+      agentHtml = renderShippingUpdate(parsed.orderId || "", parsed.newAddress || "");
+      historyContent = `Updated shipping address for ${parsed.orderId || "order"} to: ${parsed.newAddress || "new address"}.`;
+    } else if (parsed?.action === "refund") {
+      agentHtml = renderRefund(parsed.orderId || "");
+      historyContent = `Processed refund request for ${parsed.orderId || "order"}.`;
+    } else {
+      agentHtml = renderText(rawReply);
+    }
+
+    /* Save clean prose to history so follow-up requests stay clear */
+    history.push({ role: "assistant", content: historyContent });
 
     /* Save history on session so it survives tab switch */
     const s = sessions.find(s => s.id === activeId);
     if (s) s.history = [...history];
-
-    removeTyping();
-
-    /* Parse action JSON — robust extraction handles fences and prose */
-    const parsed = extractJSON(rawReply);
-    let agentHtml = "";
-
-    if (parsed?.action === "order_status") {
-      agentHtml = renderOrderStatus(parsed.orderId || "");
-    } else if (parsed?.action === "update_shipping") {
-      agentHtml = renderShippingUpdate(parsed.orderId || "", parsed.newAddress || "");
-    } else if (parsed?.action === "refund") {
-      agentHtml = renderRefund(parsed.orderId || "");
-    } else {
-      agentHtml = renderText(rawReply);
-    }
 
     appendMessage("agent", agentHtml);
     updateSession("agent", agentHtml, rawReply);
 
   } catch (err) {
     removeTyping();
-    /* Remove the user turn we pushed so history stays consistent */
+    /* Remove user turn if call failed */
     history.pop();
     showError(err.message || "Could not reach the server. Please try again.");
     console.error("[Agent error]", err);
