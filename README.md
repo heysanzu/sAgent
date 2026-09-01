@@ -8,7 +8,7 @@ An AI-powered customer support agent built to automate inquiry handling, trackin
 ---
 
 ```bash
-git clone [https://github.com/heysanzu/sAgent.git](https://github.com/heysanzu/sAgent.git)
+git clone https://github.com/heysanzu/sAgent.git
 cd sAgent
 ```
 
