@@ -1,4 +1,3 @@
-/* Custom font */
 @font-face {
   font-family: "Sanzu";
   src: url("https://raw.githubusercontent.com/heysanzu/sanzu/main/fonts/comic_sans_regular.ttf") format("truetype");
@@ -7,7 +6,7 @@
   font-display: swap;
 }
 
-/* Design tokens */
+
 :root {
   --black:      #0A0A0A;
   --white:      #FFFFFF;
@@ -27,7 +26,6 @@
   --t:          160ms ease;
 }
 
-/* Base reset */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html, body { height: 100%; }
 
@@ -43,14 +41,14 @@ button  { font-family: inherit; cursor: pointer; border: none; background: none;
 textarea { font-family: inherit; resize: none; }
 a { color: inherit; text-decoration: none; }
 
-/* ── App shell ────────────────────────────── */
+
 .app {
   display: flex;
   height: 100dvh;
   overflow: hidden;
 }
 
-/* ── Sidebar ──────────────────────────────── */
+
 .sidebar {
   width: var(--sidebar-w);
   min-width: var(--sidebar-w);
@@ -85,7 +83,7 @@ a { color: inherit; text-decoration: none; }
 .close-sidebar { display: none; color: var(--g400); }
 .close-sidebar:hover { color: var(--white); }
 
-/* Sidebar sections */
+
 .sidebar-section {
   padding: 10px 10px 0;
   flex-shrink: 0;
@@ -112,7 +110,7 @@ a { color: inherit; text-decoration: none; }
 
 .new-chat-btn svg { flex-shrink: 0; opacity: 0.7; }
 
-/* Quick actions nav */
+
 .quick-actions {
   padding: 16px 10px 0;
   display: flex;
@@ -149,7 +147,7 @@ a { color: inherit; text-decoration: none; }
 .quick-btn:hover { background: var(--g800); color: var(--white); }
 .quick-btn svg   { flex-shrink: 0; opacity: 0.65; }
 
-/* History */
+
 .history-section {
   flex: 1;
   display: flex;
@@ -193,7 +191,7 @@ a { color: inherit; text-decoration: none; }
 .history-item.active { background: var(--g800); color: var(--white); }
 .history-item svg { flex-shrink: 0; opacity: 0.5; }
 
-/* Sidebar footer */
+
 .sidebar-footer {
   padding: 14px;
   border-top: 1px solid var(--g800);
@@ -211,7 +209,7 @@ a { color: inherit; text-decoration: none; }
 
 .github-link:hover { color: var(--white); }
 
-/* ── Main chat ────────────────────────────── */
+
 .chat-area {
   flex: 1;
   display: flex;
@@ -221,7 +219,7 @@ a { color: inherit; text-decoration: none; }
   background: var(--white);
 }
 
-/* Header */
+
 .chat-header {
   height: var(--header-h);
   display: flex;
@@ -293,7 +291,7 @@ a { color: inherit; text-decoration: none; }
 
 .icon-btn:hover { background: var(--g100); color: var(--black); }
 
-/* ── Messages ─────────────────────────────── */
+
 .messages {
   flex: 1;
   overflow-y: auto;
@@ -307,7 +305,7 @@ a { color: inherit; text-decoration: none; }
 .messages::-webkit-scrollbar { width: 4px; }
 .messages::-webkit-scrollbar-thumb { background: var(--g200); border-radius: 2px; }
 
-/* Empty state */
+
 .empty-state {
   flex: 1;
   display: flex;
@@ -324,7 +322,7 @@ a { color: inherit; text-decoration: none; }
 .empty-state h2  { font-size: 16px; color: var(--g600); font-weight: 400; }
 .empty-state p   { font-size: 13px; max-width: 320px; line-height: 1.6; }
 
-/* Message row */
+
 .message {
   display: flex;
   align-items: flex-end;
@@ -355,7 +353,7 @@ a { color: inherit; text-decoration: none; }
 .message.agent .avatar { background: var(--black); color: var(--white); }
 .message.user  .avatar { background: var(--g200);  color: var(--black); }
 
-/* Bubble */
+
 .bubble {
   padding: 11px 14px;
   border-radius: var(--r);
@@ -377,7 +375,7 @@ a { color: inherit; text-decoration: none; }
   border-bottom-right-radius: 3px;
 }
 
-/* Inline text formatting inside bubbles */
+
 .bubble strong { font-weight: 600; }
 .bubble em     { font-style: italic; }
 .bubble code {
@@ -399,7 +397,7 @@ a { color: inherit; text-decoration: none; }
   gap: 3px;
 }
 
-/* Timestamp */
+
 .msg-time {
   font-size: 10px;
   color: var(--g300);
@@ -409,7 +407,7 @@ a { color: inherit; text-decoration: none; }
   padding-bottom: 2px;
 }
 
-/* ── Typing indicator ─────────────────────── */
+
 .typing-indicator {
   display: flex;
   align-items: center;
@@ -437,7 +435,7 @@ a { color: inherit; text-decoration: none; }
   27%            { transform: translateY(-5px); opacity: 1; }
 }
 
-/* ── Action cards ─────────────────────────── */
+
 .action-card {
   margin-top: 10px;
   border: 1px solid var(--g200);
@@ -491,7 +489,7 @@ a { color: inherit; text-decoration: none; }
   margin: 2px 0;
 }
 
-/* Status badges */
+
 .badge {
   display: inline-flex;
   align-items: center;
@@ -509,7 +507,7 @@ a { color: inherit; text-decoration: none; }
 .badge.cancelled { background: #f3e5f5; color: #6a1b9a; }
 .badge.processing{ background: #e3f2fd; color: #1565c0; }
 
-/* Error card */
+
 .error-card {
   margin-top: 10px;
   border: 1px solid #ffd6d6;
@@ -525,7 +523,6 @@ a { color: inherit; text-decoration: none; }
 
 .error-card svg { flex-shrink: 0; margin-top: 1px; }
 
-/* ── Input area ───────────────────────────── */
 .input-area {
   padding: 10px 14px 14px;
   border-top: 1px solid var(--g200);
@@ -586,7 +583,7 @@ a { color: inherit; text-decoration: none; }
   text-align: center;
 }
 
-/* ── Mobile overlay ───────────────────────── */
+
 .overlay {
   display: none;
   position: fixed;
@@ -596,7 +593,7 @@ a { color: inherit; text-decoration: none; }
   backdrop-filter: blur(2px);
 }
 
-/* ── Responsive ───────────────────────────── */
+
 @media (max-width: 780px) {
   .sidebar {
     position: fixed;
@@ -622,14 +619,14 @@ a { color: inherit; text-decoration: none; }
   .message  { max-width: 100%; }
 }
 
-/* Focus rings */
+
 button:focus-visible,
 textarea:focus-visible {
   outline: 2px solid var(--black);
   outline-offset: 2px;
 }
 
-/* Reduced motion */
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
