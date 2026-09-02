@@ -1,4 +1,3 @@
-/* ── DOM refs ──────────────────────────────────────────────── */
 const messagesEl  = document.getElementById("messages");
 const userInputEl = document.getElementById("userInput");
 const sendBtn     = document.getElementById("sendBtn");
@@ -10,11 +9,11 @@ const overlay     = document.getElementById("overlay");
 const newChatBtn  = document.getElementById("newChatBtn");
 const historyList = document.getElementById("historyList");
 
-/* ── Config ────────────────────────────────────────────────── */
+
 const WORKER_URL = "https://agent.doollearn.workers.dev/";
 const MODEL      = "openai/gpt-oss-120b";
 
-/* ── Order database (in-memory) ───────────────────────────── */
+
 const ORDERS = {
   "ORD-1001": {
     item: "Mechanical Keyboard (TKL)",
@@ -58,7 +57,6 @@ const ORDERS = {
   },
 };
 
-/* ── Session management (in-memory) ───────────────────────── */
 let sessions = [];
 let activeId = null;
 let history  = []; 
@@ -115,7 +113,7 @@ function renderHistory() {
   });
 }
 
-/* ── System prompt ─────────────────────────────────────────── */
+
 const SYSTEM = `You are Agent, an AI customer support assistant built by Sanzu for an online store. 
 
 IDENTITY & CONFIDENTIALITY RULES (STRICT):
@@ -145,7 +143,7 @@ STRICT OUTPUT RULES:
 - If you are answering follow-up questions or general support queries, respond in plain text only. Do NOT output JSON.
 - Never output an empty response.`;
 
-/* ── SVG icons ─────────────────────────────────────────────── */
+
 const ICONS = {
   box:    `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l2-1.14"/><path d="m7.5 4.27 9 5.15"/><polyline points="3.29 7 12 12 20.71 7"/><line x1="12" y1="22" x2="12" y2="12"/></svg>`,
   pin:    `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>`,
@@ -154,7 +152,7 @@ const ICONS = {
   check:  `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>`,
 };
 
-/* ── Sidebar toggle ────────────────────────────────────────── */
+
 function openSidebar()  { sidebar.classList.add("open");    overlay.classList.add("open"); }
 function closeSidebar() { sidebar.classList.remove("open"); overlay.classList.remove("open"); }
 
@@ -163,7 +161,7 @@ closeSbBtn.addEventListener("click", closeSidebar);
 overlay.addEventListener("click", closeSidebar);
 newChatBtn.addEventListener("click", () => { startNewSession(); closeSidebar(); });
 
-/* ── Quick action buttons ──────────────────────────────────── */
+
 document.querySelectorAll(".quick-btn").forEach(btn => {
   btn.addEventListener("click", () => {
     closeSidebar();
@@ -173,7 +171,7 @@ document.querySelectorAll(".quick-btn").forEach(btn => {
   });
 });
 
-/* ── Input behaviour ───────────────────────────────────────── */
+
 userInputEl.addEventListener("input", () => {
   userInputEl.style.height = "auto";
   userInputEl.style.height = Math.min(userInputEl.scrollHeight, 140) + "px";
@@ -197,7 +195,7 @@ clearBtn.addEventListener("click", () => {
   renderEmpty();
 });
 
-/* ── Utilities ─────────────────────────────────────────────── */
+
 function escapeHtml(str) {
   return String(str)
     .replace(/&/g, "&amp;")
@@ -218,7 +216,7 @@ function timestamp() {
   return new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
 }
 
-/* Try to extract JSON from model reply — handles ```json fences and prose wrapping */
+
 function extractJSON(str) {
   const fenced = str.match(/```(?:json)?\s*([\s\S]+?)```/i);
   const candidate = fenced ? fenced[1].trim() : str.trim();
@@ -227,7 +225,7 @@ function extractJSON(str) {
   try { return JSON.parse(match[0]); } catch (_) { return null; }
 }
 
-/* ── Render helpers ────────────────────────────────────────── */
+
 function renderEmpty() {
   const el = document.createElement("div");
   el.className = "empty-state";
@@ -300,7 +298,7 @@ function showError(msg) {
     </div>`);
 }
 
-/* ── Action card renderers ─────────────────────────────────── */
+
 function renderOrderStatus(orderId) {
   const key = (orderId || "").toUpperCase().trim();
   const o   = ORDERS[key];
@@ -376,20 +374,20 @@ function renderRefund(orderId) {
     </div>`;
 }
 
-/* ── Main send handler ─────────────────────────────────────── */
+
 async function handleSend() {
   const text = userInputEl.value.trim();
   if (!text || isBusy) return;
 
-  /* Render + record user message */
+ 
   const userHtml = renderText(text);
   appendMessage("user", userHtml);
   updateSession("user", userHtml, text);
 
-  /* Add turn to API history array */
+
   history.push({ role: "user", content: text });
 
-  /* Reset input */
+  
   userInputEl.value        = "";
   userInputEl.style.height = "auto";
   isBusy                   = true;
@@ -430,7 +428,7 @@ async function handleSend() {
 
     removeTyping();
 
-    /* Parse action JSON */
+
     const parsed = extractJSON(rawReply);
     let agentHtml = "";
     let historyContent = rawReply;
@@ -448,10 +446,10 @@ async function handleSend() {
       agentHtml = renderText(rawReply);
     }
 
-    /* Save clean prose to history so follow-up requests stay clear */
+    
     history.push({ role: "assistant", content: historyContent });
 
-    /* Save history on session so it survives tab switch */
+   
     const s = sessions.find(s => s.id === activeId);
     if (s) s.history = [...history];
 
@@ -460,7 +458,7 @@ async function handleSend() {
 
   } catch (err) {
     removeTyping();
-    /* Remove user turn if call failed */
+
     history.pop();
     showError(err.message || "Could not reach the server. Please try again.");
     console.error("[Agent error]", err);
@@ -469,6 +467,4 @@ async function handleSend() {
     sendBtn.disabled = !userInputEl.value.trim();
   }
 }
-
-/* ── Init ──────────────────────────────────────────────────── */
 startNewSession();
